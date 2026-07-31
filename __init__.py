@@ -90,7 +90,7 @@ class SFX_AudioPromptTravel:
         if ref_pooled is not None:
             extra["pooled_output"] = (ref_pooled.repeat(max_frames, 1)
                                       if ref_pooled.shape[0] == 1 else ref_pooled)
-        preview = "\n".join(f"frame {peaks[i]:>4} | {seq[i][:80]}" for i in range(len(peaks)))
+        preview = "\n".join(f"frame {peaks[i]:>4} | {seq[i]}" for i in range(len(peaks)))
         return ([[batch, extra]], preview)
 
 
