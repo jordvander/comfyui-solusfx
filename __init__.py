@@ -108,15 +108,21 @@ class SFX_CaptionsToPrompts:
     CATEGORY = "Solus FX"
     INPUT_IS_LIST = True
 
+    @staticmethod
+    def _flatten(x):
+        if isinstance(x, (list, tuple)):
+            for y in x:
+                yield from SFX_CaptionsToPrompts._flatten(y)
+        else:
+            yield str(x)
+
     def conv(self, captions, prefix=None, suffix=None, max_words=None):
         pre = (prefix[0] if isinstance(prefix, (list, tuple)) and prefix else (prefix or "")) or ""
         suf = (suffix[0] if isinstance(suffix, (list, tuple)) and suffix else (suffix or "")) or ""
         mw = (max_words[0] if isinstance(max_words, (list, tuple)) and max_words else (max_words or 0)) or 0
-        if isinstance(captions, str):
-            captions = [captions]
         out = []
-        for c in captions:
-            for line in str(c).split("\n"):
+        for c in self._flatten(captions):
+            for line in c.split("\n"):
                 line = line.strip().rstrip(".")
                 if not line:
                     continue
